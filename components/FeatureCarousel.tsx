@@ -149,8 +149,8 @@ const FeatureCarousel: React.FC = () => {
             {/* Desktop: Side-by-side Layout */}
             <div className="hidden md:block">
                 <div className="max-w-[1800px] mx-auto px-6 flex gap-8 items-start">
-                    {/* Left: Carousel - 70% width for larger video display */}
-                    <div className="flex-[70] relative group flex flex-col">
+                    {/* Left: Carousel - 65% width for larger video display */}
+                    <div className="w-[65%] relative group flex flex-col">
                         {/* Glow behind mockup */}
                         <div className="absolute -inset-4 bg-gradient-to-t from-blue-500/10 to-transparent rounded-[2rem] blur-2xl opacity-50 group-hover:opacity-80 transition duration-1000"></div>
 
@@ -226,10 +226,10 @@ const FeatureCarousel: React.FC = () => {
                         </div>
                     </div>
 
-                    {/* Right: Feature Content Sidebar - 30% width */}
+                    {/* Right: Feature Content Sidebar - 35% width */}
                     <div
                         key={activeFeature.id}
-                        className={`flex-[30] space-y-6 self-center text-left ${slideDirection === 'right' ? 'animate-slide-in-right' : 'animate-slide-in-left'
+                        className={`w-[35%] space-y-6 self-center text-left ${slideDirection === 'right' ? 'animate-slide-in-right' : 'animate-slide-in-left'
                             }`}
                     >
                         <div className="text-sm font-mono text-neutral-500 border-b border-neutral-200 pb-1 uppercase tracking-wider">
