@@ -147,9 +147,9 @@ const FeatureCarousel: React.FC = () => {
     return (
         <div className="w-full">
             {/* Desktop: Side-by-side Layout */}
-            <div className="max-w-[1800px] mx-auto px-6 flex gap-8 items-start">
-                {/* Left: Carousel - 70% width for larger video display */}
-                <div className="w-[70%] relative group flex flex-col">
+            <div className="max-w-[1800px] mx-auto px-6 flex flex-col md:flex-row gap-8 md:items-start">
+                {/* Left: Carousel - Full width on mobile, 70% on desktop */}
+                <div className="w-full md:w-[70%] relative group flex flex-col">
                     {/* Glow behind mockup */}
                     <div className="absolute -inset-4 bg-gradient-to-t from-blue-500/10 to-transparent rounded-[2rem] blur-2xl opacity-50 group-hover:opacity-80 transition duration-1000"></div>
 
@@ -225,10 +225,10 @@ const FeatureCarousel: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Right: Feature Content Sidebar - 30% width */}
+                {/* Right: Feature Content Sidebar - Full width on mobile, 30% on desktop */}
                 <div
                     key={activeFeature.id}
-                    className={`w-[30%] space-y-6 self-center text-left ${slideDirection === 'right' ? 'animate-slide-in-right' : 'animate-slide-in-left'
+                    className={`w-full md:w-[30%] space-y-6 self-center text-left ${slideDirection === 'right' ? 'animate-slide-in-right' : 'animate-slide-in-left'
                         }`}
                 >
                     <div className="text-sm font-mono text-neutral-500 border-b border-neutral-200 pb-1 uppercase tracking-wider">
