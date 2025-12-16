@@ -24,7 +24,7 @@ const Footer: React.FC = () => {
     setError('');
 
     try {
-      const response = await fetch('https://script.google.com/macros/s/AKfycbyDuTUIpeKI8aI2I6gcte2YkPFWXfOqHeNJny4Cm_pKslcQW_WpE9nJyPno8D1hsOkn/exec', {
+      await fetch('https://script.google.com/macros/s/AKfycbyDuTUIpeKI8aI2I6gcte2YkPFWXfOqHeNJny4Cm_pKslcQW_WpE9nJyPno8D1hsOkn/exec', {
         method: 'POST',
         mode: 'no-cors',
         headers: {
