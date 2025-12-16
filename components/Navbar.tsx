@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
+import { analytics } from '../lib/analytics';
 
 const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -14,6 +15,7 @@ const Navbar: React.FC = () => {
   }, []);
 
   const scrollToSection = (id: string) => {
+    analytics.trackNavigationClick(id);
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
@@ -31,7 +33,6 @@ const Navbar: React.FC = () => {
 
         {/* Desktop Menu */}
         <div className="hidden md:flex items-center space-x-8">
-          <button onClick={() => scrollToSection('features')} className="text-sm text-neutral-500 hover:text-black transition-colors">Features</button>
           <button onClick={() => scrollToSection('integration')} className="text-sm text-neutral-500 hover:text-black transition-colors">Integration</button>
           <button onClick={() => scrollToSection('footer')} className="bg-black text-white px-5 py-2 rounded-full text-sm font-medium hover:bg-neutral-800 transition-colors">
             Get Early Access
@@ -49,7 +50,6 @@ const Navbar: React.FC = () => {
       {/* Mobile Menu */}
       {mobileMenuOpen && (
         <div className="absolute top-full left-0 right-0 bg-white border-b border-neutral-100 p-6 md:hidden flex flex-col space-y-4 shadow-xl">
-          <button onClick={() => scrollToSection('features')} className="text-left text-neutral-600">Features</button>
           <button onClick={() => scrollToSection('integration')} className="text-left text-neutral-600">Integration</button>
           <button onClick={() => scrollToSection('footer')} className="bg-black text-white px-5 py-3 rounded-lg text-sm font-medium text-center">
             Get Early Access
