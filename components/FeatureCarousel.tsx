@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ChevronLeft, ChevronRight, Play } from 'lucide-react';
-import { analytics } from '../lib/analytics';
 
 interface Feature {
     id: number;
@@ -64,7 +63,6 @@ const FeatureCarousel: React.FC = () => {
     const [touchStart, setTouchStart] = useState(0);
     const [touchEnd, setTouchEnd] = useState(0);
     const [slideDirection, setSlideDirection] = useState<'left' | 'right'>('right');
-    const [videoProgress, setVideoProgress] = useState<{ [key: string]: boolean }>({});
     const videoRef = useRef<HTMLVideoElement>(null);
 
     const activeFeature = features[activeIndex];
@@ -77,49 +75,23 @@ const FeatureCarousel: React.FC = () => {
         // Reset video to beginning and pause
         video.currentTime = 0;
         video.pause();
-        setVideoProgress({}); // Reset progress tracking
 
         // Wait for slide animation (500ms) + 0.5 second delay before playing
         const playTimer = setTimeout(() => {
-            analytics.trackVideoStart(activeFeature.title);
             video.play().catch(err => console.log('Video play error:', err));
         }, 1000); // 500ms animation + 500ms pause
 
-        // Track video progress
-        const handleTimeUpdate = () => {
-            const progress = (video.currentTime / video.duration) * 100;
-            const videoName = activeFeature.title;
-
-            if (progress >= 25 && !videoProgress[`${videoName} _25`]) {
-                analytics.trackVideoProgress(videoName, 25);
-                setVideoProgress(prev => ({ ...prev, [`${videoName} _25`]: true }));
-            }
-            if (progress >= 50 && !videoProgress[`${videoName} _50`]) {
-                analytics.trackVideoProgress(videoName, 50);
-                setVideoProgress(prev => ({ ...prev, [`${videoName} _50`]: true }));
-            }
-            if (progress >= 75 && !videoProgress[`${videoName} _75`]) {
-                analytics.trackVideoProgress(videoName, 75);
-                setVideoProgress(prev => ({ ...prev, [`${videoName} _75`]: true }));
-            }
-        };
-
-        video.addEventListener('timeupdate', handleTimeUpdate);
-
         return () => {
             clearTimeout(playTimer);
-            video.removeEventListener('timeupdate', handleTimeUpdate);
         };
     }, [activeIndex]);
 
     // Video ended handler - advance to next slide
     const handleVideoEnded = () => {
-        analytics.trackVideoComplete(activeFeature.title);
         goToNext();
     };
 
     const goToNext = () => {
-        analytics.trackCarouselNav('next', 'arrow');
         setSlideDirection('right');
         setTimeout(() => {
             setActiveIndex((prev) => (prev + 1) % features.length);
@@ -127,7 +99,6 @@ const FeatureCarousel: React.FC = () => {
     };
 
     const goToPrev = () => {
-        analytics.trackCarouselNav('prev', 'arrow');
         setSlideDirection('left');
         setTimeout(() => {
             setActiveIndex((prev) => (prev - 1 + features.length) % features.length);
@@ -135,7 +106,6 @@ const FeatureCarousel: React.FC = () => {
     };
 
     const goToSlide = (index: number) => {
-        analytics.trackCarouselNav(index > activeIndex ? 'next' : 'prev', 'dot');
         if (index > activeIndex) {
             setSlideDirection('right');
         } else {
@@ -178,7 +148,7 @@ const FeatureCarousel: React.FC = () => {
         <div className="w-full">
             {/* Desktop: Side-by-side Layout */}
             <div className="hidden md:block">
-                <div className="max-w-[1800px] mx-auto px-6 flex gap-12 items-start">
+                <div className="max-w-[1800px] mx-auto px-6 flex gap-8 items-start">
                     {/* Left: Carousel - 70% width for larger video display */}
                     <div className="flex-[70] relative group flex flex-col">
                         {/* Glow behind mockup */}
@@ -246,11 +216,11 @@ const FeatureCarousel: React.FC = () => {
                                 <button
                                     key={index}
                                     onClick={() => goToSlide(index)}
-                                    className={`transition - all duration - 300 rounded - full ${index === activeIndex
-                                            ? 'w-8 h-2 bg-blue-600'
-                                            : 'w-2 h-2 bg-neutral-300 hover:bg-neutral-400'
-                                        } `}
-                                    aria-label={`Go to feature ${index + 1} `}
+                                    className={`transition-all duration-300 rounded-full ${index === activeIndex
+                                        ? 'w-8 h-2 bg-blue-600'
+                                        : 'w-2 h-2 bg-neutral-300 hover:bg-neutral-400'
+                                        }`}
+                                    aria-label={`Go to feature ${index + 1}`}
                                 />
                             ))}
                         </div>
@@ -259,8 +229,8 @@ const FeatureCarousel: React.FC = () => {
                     {/* Right: Feature Content Sidebar - 30% width */}
                     <div
                         key={activeFeature.id}
-                        className={`flex - [30] space - y - 6 self - center text - left ${slideDirection === 'right' ? 'animate-slide-in-right' : 'animate-slide-in-left'
-                            } `}
+                        className={`flex-[30] space-y-6 self-center text-left ${slideDirection === 'right' ? 'animate-slide-in-right' : 'animate-slide-in-left'
+                            }`}
                     >
                         <div className="text-sm font-mono text-neutral-500 border-b border-neutral-200 pb-1 uppercase tracking-wider">
                             <span>{activeFeature.label}</span>
@@ -330,33 +300,33 @@ const FeatureCarousel: React.FC = () => {
             </div>
 
             <style>{`
-@keyframes slide -in -right {
-          from {
-        opacity: 0;
-        transform: translateX(50px);
-    }
-          to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-@keyframes slide -in -left {
-          from {
-        opacity: 0;
-        transform: translateX(-50px);
-    }
-          to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-        .animate - slide -in -right {
-    animation: slide -in -right 0.5s cubic - bezier(0.16, 1, 0.3, 1) forwards;
-}
-        .animate - slide -in -left {
-    animation: slide -in -left 0.5s cubic - bezier(0.16, 1, 0.3, 1) forwards;
-}
-`}</style>
+        @keyframes slide-in-right {
+          from { 
+            opacity: 0;
+            transform: translateX(50px);
+          }
+          to { 
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+        @keyframes slide-in-left {
+          from { 
+            opacity: 0;
+            transform: translateX(-50px);
+          }
+          to { 
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+        .animate-slide-in-right {
+          animation: slide-in-right 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .animate-slide-in-left {
+          animation: slide-in-left 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+      `}</style>
         </div>
     );
 };

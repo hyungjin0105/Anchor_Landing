@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from 'react';
 import FeatureCarousel from './FeatureCarousel';
-import { analytics } from '../lib/analytics';
 
 const Hero: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -302,7 +301,6 @@ const Hero: React.FC = () => {
         <div className="flex flex-col md:flex-row gap-5 w-full md:w-auto animate-fade-in-up mb-16" style={{ animationDelay: '0.3s' }}>
           <button
             onClick={() => {
-              analytics.trackCTAClick('hero', 'Get Early Access');
               const footer = document.getElementById('footer');
               if (footer) footer.scrollIntoView({ behavior: 'smooth' });
             }}

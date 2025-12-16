@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { ArrowRight, Check } from 'lucide-react';
 import PrivacyModal from './PrivacyModal';
 import TermsModal from './TermsModal';
-import { analytics } from '../lib/analytics';
 
 const Footer: React.FC = () => {
   const [name, setName] = useState('');
@@ -21,7 +20,6 @@ const Footer: React.FC = () => {
       return;
     }
 
-    analytics.trackFormSubmit('footer');
     setLoading(true);
     setError('');
 
@@ -36,7 +34,6 @@ const Footer: React.FC = () => {
       });
 
       // With no-cors mode, we can't read the response, but if no error is thrown, it likely succeeded
-      analytics.trackFormSuccess();
       setSubmitted(true);
       setTimeout(() => {
         setName('');
@@ -117,20 +114,13 @@ const Footer: React.FC = () => {
           </div>
           <div className="flex gap-8">
             <button
-              data-privacy-link
-              onClick={() => {
-                analytics.trackModalOpen('privacy');
-                setShowPrivacy(true);
-              }}
+              onClick={() => setShowPrivacy(true)}
               className="hover:text-black transition-colors cursor-pointer"
             >
               Privacy
             </button>
             <button
-              onClick={() => {
-                analytics.trackModalOpen('terms');
-                setShowTerms(true);
-              }}
+              onClick={() => setShowTerms(true)}
               className="hover:text-black transition-colors cursor-pointer"
             >
               Terms
